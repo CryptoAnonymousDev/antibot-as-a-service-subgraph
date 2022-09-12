@@ -1,0 +1,11 @@
+type Token @entity {
+  id: Bytes!
+  antibotActive: Boolean!
+  tradingStart: BigInt!
+  maxTransferAmount: BigInt!
+  owners: [Bytes!]
+  whitelistedAccounts: [Bytes!]
+  unthrottledAccounts: [Bytes!]
+  protectedAccounts: [Bytes!]
+  blacklistedAccounts: [Bytes!]
+}

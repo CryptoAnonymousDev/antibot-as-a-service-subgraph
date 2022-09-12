@@ -6,7 +6,7 @@ dataSources:
     name: Antibot
     network: goerli
     source:
-      address: "0x0000000000000000000000000000000000000000"
+      address: "0x433fbbb6fc25ef10838f8915fc7961e8760d9503"
       abi: Antibot
       startBlock: 7577549
     mapping:

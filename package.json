@@ -1,0 +1,16 @@
+{
+  "name": "antibot-as-a-service-subgraph",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ cryptoanonymousdev/antibot-as-a-service-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ cryptoanonymousdev/antibot-as-a-service-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ cryptoanonymousdev/antibot-as-a-service-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 cryptoanonymousdev/antibot-as-a-service-subgraph"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.32.0",
+    "@graphprotocol/graph-ts": "0.27.0"
+  }
+}

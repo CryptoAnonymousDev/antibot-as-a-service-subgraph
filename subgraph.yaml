@@ -1,0 +1,59 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Antibot
+    network: goerli
+    source:
+      address: "0x0000000000000000000000000000000000000000"
+      abi: Antibot
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - AntibotActiveChanged
+        - AuthorityChanged
+        - BeaconUpgraded
+        - Initialized
+        - MarkedBlacklisted
+        - MarkedProtected
+        - MarkedUnthrottled
+        - MarkedWhitelisted
+        - MaxTransferAmountChanged
+        - OwnershipTransferred
+        - TradingStartChanged
+        - Upgraded
+      abis:
+        - name: Antibot
+          file: ./abis/Antibot.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: AntibotActiveChanged(indexed address,bool)
+          handler: handleAntibotActiveChanged
+        - event: AuthorityChanged(indexed address,indexed address,bool)
+          handler: handleAuthorityChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: MarkedBlacklisted(indexed address,address,bool)
+          handler: handleMarkedBlacklisted
+        - event: MarkedProtected(indexed address,address,bool)
+          handler: handleMarkedProtected
+        - event: MarkedUnthrottled(indexed address,address,bool)
+          handler: handleMarkedUnthrottled
+        - event: MarkedWhitelisted(indexed address,address,bool)
+          handler: handleMarkedWhitelisted
+        - event: MaxTransferAmountChanged(indexed address,uint256)
+          handler: handleMaxTransferAmountChanged
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: TradingStartChanged(indexed address,uint256)
+          handler: handleTradingStartChanged
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/antibot.ts

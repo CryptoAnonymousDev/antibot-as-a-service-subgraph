@@ -15,7 +15,7 @@ import {
   TradingStartChanged,
   Upgraded
 } from "../generated/Antibot/Antibot"
-import { ExampleEntity } from "../generated/schema"
+import { Token } from "../generated/schema"
 
 export function handleAdminChanged(event: AdminChanged): void {
   // Entities can be loaded from the store using a string ID; this ID

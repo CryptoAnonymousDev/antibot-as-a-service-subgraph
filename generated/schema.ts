@@ -69,21 +69,13 @@ export class Token extends Entity {
     this.set("maxTransferAmount", Value.fromBigInt(value));
   }
 
-  get owners(): Array<Bytes> | null {
+  get owners(): Array<Bytes> {
     let value = this.get("owners");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytesArray();
-    }
+    return value!.toBytesArray();
   }
 
-  set owners(value: Array<Bytes> | null) {
-    if (!value) {
-      this.unset("owners");
-    } else {
-      this.set("owners", Value.fromBytesArray(<Array<Bytes>>value));
-    }
+  set owners(value: Array<Bytes>) {
+    this.set("owners", Value.fromBytesArray(value));
   }
 
   get whitelistedAccounts(): Array<Bytes> | null {
@@ -161,5 +153,340 @@ export class Token extends Entity {
         Value.fromBytesArray(<Array<Bytes>>value)
       );
     }
+  }
+}
+
+export class User extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save User entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type User must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("User", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): User | null {
+    return changetype<User | null>(store.get("User", id.toHexString()));
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get ownerTokens(): Array<Bytes> {
+    let value = this.get("ownerTokens");
+    return value!.toBytesArray();
+  }
+
+  set ownerTokens(value: Array<Bytes>) {
+    this.set("ownerTokens", Value.fromBytesArray(value));
+  }
+
+  get whitelistedTokens(): Array<Bytes> {
+    let value = this.get("whitelistedTokens");
+    return value!.toBytesArray();
+  }
+
+  set whitelistedTokens(value: Array<Bytes>) {
+    this.set("whitelistedTokens", Value.fromBytesArray(value));
+  }
+
+  get unthrottledTokens(): Array<Bytes> {
+    let value = this.get("unthrottledTokens");
+    return value!.toBytesArray();
+  }
+
+  set unthrottledTokens(value: Array<Bytes>) {
+    this.set("unthrottledTokens", Value.fromBytesArray(value));
+  }
+
+  get protectedTokens(): Array<Bytes> {
+    let value = this.get("protectedTokens");
+    return value!.toBytesArray();
+  }
+
+  set protectedTokens(value: Array<Bytes>) {
+    this.set("protectedTokens", Value.fromBytesArray(value));
+  }
+
+  get blacklistedTokens(): Array<Bytes> {
+    let value = this.get("blacklistedTokens");
+    return value!.toBytesArray();
+  }
+
+  set blacklistedTokens(value: Array<Bytes>) {
+    this.set("blacklistedTokens", Value.fromBytesArray(value));
+  }
+}
+
+export class Owner extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Owner entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type Owner must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Owner", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): Owner | null {
+    return changetype<Owner | null>(store.get("Owner", id.toHexString()));
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get token(): Bytes {
+    let value = this.get("token");
+    return value!.toBytes();
+  }
+
+  set token(value: Bytes) {
+    this.set("token", Value.fromBytes(value));
+  }
+
+  get user(): Bytes {
+    let value = this.get("user");
+    return value!.toBytes();
+  }
+
+  set user(value: Bytes) {
+    this.set("user", Value.fromBytes(value));
+  }
+}
+
+export class WhitelistedAccount extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save WhitelistedAccount entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type WhitelistedAccount must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("WhitelistedAccount", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): WhitelistedAccount | null {
+    return changetype<WhitelistedAccount | null>(
+      store.get("WhitelistedAccount", id.toHexString())
+    );
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get token(): Bytes {
+    let value = this.get("token");
+    return value!.toBytes();
+  }
+
+  set token(value: Bytes) {
+    this.set("token", Value.fromBytes(value));
+  }
+
+  get user(): Bytes {
+    let value = this.get("user");
+    return value!.toBytes();
+  }
+
+  set user(value: Bytes) {
+    this.set("user", Value.fromBytes(value));
+  }
+}
+
+export class UnthrottledAccount extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save UnthrottledAccount entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type UnthrottledAccount must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("UnthrottledAccount", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): UnthrottledAccount | null {
+    return changetype<UnthrottledAccount | null>(
+      store.get("UnthrottledAccount", id.toHexString())
+    );
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get token(): Bytes {
+    let value = this.get("token");
+    return value!.toBytes();
+  }
+
+  set token(value: Bytes) {
+    this.set("token", Value.fromBytes(value));
+  }
+
+  get user(): Bytes {
+    let value = this.get("user");
+    return value!.toBytes();
+  }
+
+  set user(value: Bytes) {
+    this.set("user", Value.fromBytes(value));
+  }
+}
+
+export class ProtectedAccount extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ProtectedAccount entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type ProtectedAccount must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ProtectedAccount", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): ProtectedAccount | null {
+    return changetype<ProtectedAccount | null>(
+      store.get("ProtectedAccount", id.toHexString())
+    );
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get token(): Bytes {
+    let value = this.get("token");
+    return value!.toBytes();
+  }
+
+  set token(value: Bytes) {
+    this.set("token", Value.fromBytes(value));
+  }
+
+  get user(): Bytes {
+    let value = this.get("user");
+    return value!.toBytes();
+  }
+
+  set user(value: Bytes) {
+    this.set("user", Value.fromBytes(value));
+  }
+}
+
+export class BlacklistedAccount extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save BlacklistedAccount entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type BlacklistedAccount must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("BlacklistedAccount", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static load(id: Bytes): BlacklistedAccount | null {
+    return changetype<BlacklistedAccount | null>(
+      store.get("BlacklistedAccount", id.toHexString())
+    );
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    return value!.toBytes();
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get token(): Bytes {
+    let value = this.get("token");
+    return value!.toBytes();
+  }
+
+  set token(value: Bytes) {
+    this.set("token", Value.fromBytes(value));
+  }
+
+  get user(): Bytes {
+    let value = this.get("user");
+    return value!.toBytes();
+  }
+
+  set user(value: Bytes) {
+    this.set("user", Value.fromBytes(value));
   }
 }

@@ -70,14 +70,7 @@ export function handleAdminChanged(event: AdminChanged): void {
 }
 
 export function handleAntibotActiveChanged(event: AntibotActiveChanged): void {
-  let token = Token.load(event.params.token);
-
-  if (!token) {
-    token = new Token(event.params.token);
-
-    token.tradingStart = BigInt.fromI32(0);
-    token.maxTransferAmount = BigInt.fromI32(0);
-  }
+  let token = new Token(event.params.token);
 
   token.antibotActive = event.params.active;
 

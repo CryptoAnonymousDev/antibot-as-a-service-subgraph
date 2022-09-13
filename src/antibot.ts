@@ -118,7 +118,7 @@ export function handleAuthorityChanged(event: AuthorityChanged): void {
     }
   } else {
     if (owner)
-      store.remove('Owner', event.params.target.concat(event.params.user).toString());
+      store.remove('Owner', event.params.target.concat(event.params.user).toHexString());
   }
 }
 

@@ -3,9 +3,48 @@ type Token @entity {
   antibotActive: Boolean!
   tradingStart: BigInt!
   maxTransferAmount: BigInt!
-  owners: [Bytes!]
-  whitelistedAccounts: [Bytes!]
-  unthrottledAccounts: [Bytes!]
-  protectedAccounts: [Bytes!]
-  blacklistedAccounts: [Bytes!]
+  owners: [Owner!]! @derivedFrom(field: "token")
+  whitelistedAccounts: [WhitelistedAccount!] @derivedFrom(field: "token")
+  unthrottledAccounts: [UnthrottledAccount!] @derivedFrom(field: "token")
+  protectedAccounts: [ProtectedAccount!] @derivedFrom(field: "token")
+  blacklistedAccounts: [BlacklistedAccount!] @derivedFrom(field: "token")
+}
+
+type User @entity {
+  id: Bytes!
+  ownerTokens: [Owner!]! @derivedFrom(field: "user")
+  whitelistedTokens: [WhitelistedAccount!]! @derivedFrom(field: "user")
+  unthrottledTokens: [UnthrottledAccount!]! @derivedFrom(field: "user")
+  protectedTokens: [ProtectedAccount!]! @derivedFrom(field: "user")
+  blacklistedTokens: [BlacklistedAccount!]! @derivedFrom(field: "user")
+}
+
+type Owner @entity {
+  id: Bytes!
+  token: Token!
+  user: User!
+}
+
+type WhitelistedAccount @entity {
+  id: Bytes!
+  token: Token!
+  user: User!
+}
+
+type UnthrottledAccount @entity {
+  id: Bytes!
+  token: Token!
+  user: User!
+}
+
+type ProtectedAccount @entity {
+  id: Bytes!
+  token: Token!
+  user: User!
+}
+
+type BlacklistedAccount @entity {
+  id: Bytes!
+  token: Token!
+  user: User!
 }

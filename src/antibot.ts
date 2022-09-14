@@ -15,7 +15,7 @@ import {
   TradingStartChanged,
   Upgraded
 } from "../generated/Antibot/Antibot"
-import { BlacklistedAccount, Owner, Token, User } from "../generated/schema"
+import { BlacklistedAccount, Owner, ProtectedAccount, Token, User } from "../generated/schema"
 
 export function handleAdminChanged(event: AdminChanged): void {}
 
@@ -107,7 +107,43 @@ export function handleMarkedBlacklisted(event: MarkedBlacklisted): void {
   }
 }
 
-export function handleMarkedProtected(event: MarkedProtected): void {}
+export function handleMarkedProtected(event: MarkedProtected): void {
+  let token = Token.load(event.params.token);
+
+  if (!token) {
+    token = new Token(event.params.token);
+
+    token.antibotActive = false;
+    token.tradingStart = BigInt.fromI32(0);
+    token.maxTransferAmount = BigInt.fromI32(0);
+
+    token.save();
+  }
+
+  let user = User.load(event.params.account);
+
+  if (!user) {
+    user = new User(event.params.account);
+
+    user.save();
+  }
+
+  let protectedAccount = ProtectedAccount.load(event.params.token.concat(event.params.account));
+
+  if (event.params.isProtected) {
+    if (!protectedAccount) {
+      protectedAccount = new ProtectedAccount(event.params.token.concat(event.params.account));
+
+      protectedAccount.token = token.id;
+      protectedAccount.user = user.id;
+
+      protectedAccount.save();
+    }
+  } else {
+    if (protectedAccount)
+      store.remove('ProtectedAccount', event.params.token.concat(event.params.account).toHexString());
+  }
+}
 
 export function handleMarkedUnthrottled(event: MarkedUnthrottled): void {}
 

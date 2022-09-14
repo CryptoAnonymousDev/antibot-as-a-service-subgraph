@@ -66,7 +66,6 @@ export function handleAdminChanged(event: AdminChanged): void {
   // - contract.maxTransferAmount(...)
   // - contract.owner(...)
   // - contract.proxiableUUID(...)
-  // - contract.tradingStart(...)
 }
 
 export function handleAntibotActiveChanged(event: AntibotActiveChanged): void {

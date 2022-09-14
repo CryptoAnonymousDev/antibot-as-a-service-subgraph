@@ -15,7 +15,7 @@ import {
   TradingStartChanged,
   Upgraded
 } from "../generated/Antibot/Antibot"
-import { BlacklistedAccount, Owner, ProtectedAccount, Token, User } from "../generated/schema"
+import { BlacklistedAccount, Owner, ProtectedAccount, Token, UnthrottledAccount, User } from "../generated/schema"
 
 export function handleAdminChanged(event: AdminChanged): void {}
 
@@ -145,7 +145,43 @@ export function handleMarkedProtected(event: MarkedProtected): void {
   }
 }
 
-export function handleMarkedUnthrottled(event: MarkedUnthrottled): void {}
+export function handleMarkedUnthrottled(event: MarkedUnthrottled): void {
+  let token = Token.load(event.params.token);
+
+  if (!token) {
+    token = new Token(event.params.token);
+
+    token.antibotActive = false;
+    token.tradingStart = BigInt.fromI32(0);
+    token.maxTransferAmount = BigInt.fromI32(0);
+
+    token.save();
+  }
+
+  let user = User.load(event.params.account);
+
+  if (!user) {
+    user = new User(event.params.account);
+
+    user.save();
+  }
+
+  let unthrottledAccount = UnthrottledAccount.load(event.params.token.concat(event.params.account));
+
+  if (event.params.isUnthrottled) {
+    if (!unthrottledAccount) {
+      unthrottledAccount = new UnthrottledAccount(event.params.token.concat(event.params.account));
+
+      unthrottledAccount.token = token.id;
+      unthrottledAccount.user = user.id;
+
+      unthrottledAccount.save();
+    }
+  } else {
+    if (unthrottledAccount)
+      store.remove('UnthrottledAccount', event.params.token.concat(event.params.account).toHexString());
+  }
+}
 
 export function handleMarkedWhitelisted(event: MarkedWhitelisted): void {}
 

@@ -15,7 +15,15 @@ import {
   TradingStartChanged,
   Upgraded
 } from "../generated/Antibot/Antibot"
-import { BlacklistedAccount, Owner, ProtectedAccount, Token, UnthrottledAccount, User } from "../generated/schema"
+import { 
+  BlacklistedAccount, 
+  Owner, 
+  ProtectedAccount, 
+  Token, 
+  UnthrottledAccount,
+  User, 
+  WhitelistedAccount 
+} from "../generated/schema"
 
 export function handleAdminChanged(event: AdminChanged): void {}
 
@@ -183,7 +191,43 @@ export function handleMarkedUnthrottled(event: MarkedUnthrottled): void {
   }
 }
 
-export function handleMarkedWhitelisted(event: MarkedWhitelisted): void {}
+export function handleMarkedWhitelisted(event: MarkedWhitelisted): void {
+  let token = Token.load(event.params.token);
+
+  if (!token) {
+    token = new Token(event.params.token);
+
+    token.antibotActive = false;
+    token.tradingStart = BigInt.fromI32(0);
+    token.maxTransferAmount = BigInt.fromI32(0);
+
+    token.save();
+  }
+
+  let user = User.load(event.params.account);
+
+  if (!user) {
+    user = new User(event.params.account);
+
+    user.save();
+  }
+
+  let whitelistedAccount = WhitelistedAccount.load(event.params.token.concat(event.params.account));
+
+  if (event.params.isWhitelisted) {
+    if (!whitelistedAccount) {
+      whitelistedAccount = new WhitelistedAccount(event.params.token.concat(event.params.account));
+
+      whitelistedAccount.token = token.id;
+      whitelistedAccount.user = user.id;
+
+      whitelistedAccount.save();
+    }
+  } else {
+    if (whitelistedAccount)
+      store.remove('WhitelistedAccount', event.params.token.concat(event.params.account).toHexString());
+  }
+}
 
 export function handleMaxTransferAmountChanged(
   event: MaxTransferAmountChanged

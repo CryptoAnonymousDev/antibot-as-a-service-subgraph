@@ -65,7 +65,6 @@ export function handleAdminChanged(event: AdminChanged): void {
   // - contract.isWhitelisted(...)
   // - contract.maxTransferAmount(...)
   // - contract.owner(...)
-  // - contract.proxiableUUID(...)
 }
 
 export function handleAntibotActiveChanged(event: AntibotActiveChanged): void {

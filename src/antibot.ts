@@ -231,7 +231,13 @@ export function handleMarkedWhitelisted(event: MarkedWhitelisted): void {
 
 export function handleMaxTransferAmountChanged(
   event: MaxTransferAmountChanged
-): void {}
+): void {
+  let token = new Token(event.params.token);
+
+  token.maxTransferAmount = event.params.maxTransferAmount;
+
+  token.save();
+}
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 

@@ -235,6 +235,12 @@ export function handleMaxTransferAmountChanged(
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
-export function handleTradingStartChanged(event: TradingStartChanged): void {}
+export function handleTradingStartChanged(event: TradingStartChanged): void {
+  let token = new Token(event.params.token);
+
+  token.tradingStart = event.params.tradingStart;
+
+  token.save();
+}
 
 export function handleUpgraded(event: Upgraded): void {}

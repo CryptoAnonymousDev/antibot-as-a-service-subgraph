@@ -239,7 +239,14 @@ export function handleMarkedWhitelisted(event: MarkedWhitelisted): void {
 export function handleMaxTransferAmountChanged(
   event: MaxTransferAmountChanged
 ): void {
-  let token = new Token(event.params.token);
+  let token = Token.load(event.params.token); 
+  
+  if (!token) {
+    token = new Token(event.params.token);
+
+    token.antibotActive = false;
+    token.tradingStart = BigInt.zero();
+  }
 
   token.maxTransferAmount = event.params.maxTransferAmount;
 

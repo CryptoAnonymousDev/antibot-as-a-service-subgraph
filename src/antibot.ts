@@ -256,7 +256,14 @@ export function handleMaxTransferAmountChanged(
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
 export function handleTradingStartChanged(event: TradingStartChanged): void {
-  let token = new Token(event.params.token);
+  let token = Token.load(event.params.token); 
+  
+  if (!token) {
+    token = new Token(event.params.token);
+
+    token.antibotActive = false;
+    token.maxTransferAmount = BigInt.zero();
+  }
 
   token.tradingStart = event.params.tradingStart;
 
